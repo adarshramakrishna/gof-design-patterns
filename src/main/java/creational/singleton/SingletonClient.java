@@ -12,7 +12,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 /**
- * A client for testing Singleton implementation
+ * A client for testing {@link SingletonLazy} implementation
+ * The same client can be exchanged to test the {@link SingletonStatic} as well
  * 
  * @author rkaranth
  *
@@ -30,20 +31,20 @@ public class SingletonClient {
 		//Create 10 threads to simulate a multi-threaded environment
 		ExecutorService service = Executors.newFixedThreadPool(NO_OF_THREADS);
 		
-		List<Future<Singleton>> singleton = new ArrayList<Future<Singleton>>();
-		List<Singleton> singletonList = new ArrayList<Singleton>();
+		List<Future<SingletonLazy>> singleton = new ArrayList<Future<SingletonLazy>>();
+		List<SingletonLazy> singletonList = new ArrayList<SingletonLazy>();
 		
 		//Give Callable task to the created threads
 		for (int i = 0; i < 100; i++) {
 			singleton.add(
-			service.submit(new Callable<Singleton>() {
-				public Singleton call() throws Exception {
-					return Singleton.getInstance();
+			service.submit(new Callable<SingletonLazy>() {
+				public SingletonLazy call() throws Exception {
+					return SingletonLazy.getInstance();
 				}
 			}));
 		}
 		
-		for (Future<Singleton> obj : singleton) {
+		for (Future<SingletonLazy> obj : singleton) {
 			singletonList.add(obj.get());
 		}
 		
@@ -57,9 +58,9 @@ public class SingletonClient {
 		}
 		
 		if (!isMultipleInstanceCreated) {
-			System.out.println("All is well, there is only a single instance of Singleton class");
+			System.out.println("All is well, there is only a single instance of SingletonLazy class");
 		} else {
-			System.out.println("Something went wrong!!!!, Multiple instances of Singleton were created");
+			System.out.println("Something went wrong!!!!, Multiple instances of SingletonLazy were created");
 		}
 		
 	}
